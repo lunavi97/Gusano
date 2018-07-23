@@ -38,6 +38,43 @@ public class Gusano extends EjercicioOIA {
     }
   }
 
+  private void lectura() throws FileNotFoundException {
+    Scanner sc = new Scanner(entrada);
+    ArrayList<Arista> aristas = new ArrayList<Arista>();
+    adyacentes = new HashMap<>();
+    int cantAristas = sc.nextInt();
+
+    for (int i = 0; i < cantAristas; i++) {
+      int nodoInicial = sc.nextInt() - 1;
+      int costo = sc.nextInt();
+      int nodoFinal = sc.nextInt() - 1;
+      if (nodoInicial > nodoFinal) {
+        int aux = nodoFinal;
+        nodoFinal = nodoInicial;
+        nodoInicial = aux;
+      }
+
+      aristas.add(new Arista(nodoInicial, costo, nodoFinal));
+      if(!adyacentes.containsKey(nodoInicial)){
+        adyacentes.put(nodoInicial, new ArrayList<Integer>());
+      }
+      adyacentes.get(nodoInicial).add(nodoFinal);
+      if(!adyacentes.containsKey(nodoFinal)){
+        adyacentes.put(nodoFinal, new ArrayList<Integer>());
+      }
+      adyacentes.get(nodoFinal).add(nodoInicial);
+    }
+    int cantidadDeNodos = Collections.max(adyacentes.keySet())+1;
+    grafo = new Grafo(cantidadDeNodos);
+    setearAristasDeGrafo(aristas);
+    nodosInfectados = new HashMap<>();
+    int cantidadDeInfectados = sc.nextInt();
+    for(int j=0; j<cantidadDeInfectados; j++){
+      nodosInfectados.put(sc.nextInt() - 1, sc.nextInt());
+    }
+    sc.close();
+  }
+
   private void escritura() throws IOException {
     PrintWriter pw = new PrintWriter(new FileWriter(salida));
 
@@ -137,43 +174,6 @@ public class Gusano extends EjercicioOIA {
     }
 
     return distancia;
-  }
-
-
-  private void lectura() throws FileNotFoundException {
-    Scanner sc = new Scanner(entrada);
-    ArrayList<Arista> aristas = new ArrayList<Arista>();
-    int cantAristas = sc.nextInt();
-
-    for (int i = 0; i < cantAristas; i++) {
-      int nodoInicial = sc.nextInt() - 1;
-      int costo = sc.nextInt();
-      int nodoFinal = sc.nextInt() - 1;
-      if (nodoInicial > nodoFinal) {
-        int aux = nodoFinal;
-        nodoFinal = nodoInicial;
-        nodoInicial = aux;
-      }
-
-      aristas.add(new Arista(nodoInicial, costo, nodoFinal));
-      if(!adyacentes.containsKey(nodoInicial)){
-        adyacentes.put(nodoInicial, new ArrayList<Integer>());
-      }
-      adyacentes.get(nodoInicial).add(nodoFinal);
-      if(!adyacentes.containsKey(nodoFinal)){
-        adyacentes.put(nodoFinal, new ArrayList<Integer>());
-      }
-      adyacentes.get(nodoFinal).add(nodoInicial);
-    }
-    int cantidadDeNodos = Collections.max(adyacentes.keySet())+1;
-    grafo = new Grafo(cantidadDeNodos);
-    setearAristasDeGrafo(aristas);
-    nodosInfectados = new HashMap<>();
-    int cantidadDeInfectados = sc.nextInt();
-    for(int j=0; j<cantidadDeInfectados; j++){
-      nodosInfectados.put(sc.nextInt() - 1, sc.nextInt());
-    }
-    sc.close();
   }
 
   private void setearAristasDeGrafo(ArrayList<Arista> aristas) {
