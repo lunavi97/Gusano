@@ -14,11 +14,24 @@ public class MatrizSimetrica {
   }
 
   public Integer getMatriz(int i, int j) {
-    return vec[(int) (i * cantNodos + j - (Math.pow(i, 2) + i * 3 + 2) / 2)];
+    if (i < j) {
+      return vec[(int) (i * cantNodos + j -
+          (Math.pow(i, 2) + i * 3 + 2) / 2)];
+    }
+
+    return vec[(int) (j * cantNodos + i - 
+        (Math.pow(j, 2) + j * 3 + 2) / 2)];
   }
 
   public void setMatriz(int i, int j, int costo) {
-    vec[(int) (i * cantNodos + j - (Math.pow(i, 2) + i * 3 + 2) / 2)] = costo;
+    if (i < j) {
+      vec[(int) (i * cantNodos + j -
+          (Math.pow(i, 2) + i * 3 + 2) / 2)] = costo;
+      return;
+    }
+
+    vec[(int) (j * cantNodos + i - 
+        (Math.pow(j, 2) + j * 3 + 2) / 2)] = costo;
   }
 
   public ArrayList<Integer> obtenerAdyacentes(int nodo) {
